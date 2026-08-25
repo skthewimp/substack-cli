@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="510" viewBox="0 0 1200 510" role="img" aria-label="The substack-cli loop: push a markdown file to a draft, publish or schedule the draft to a live post, update a live post through the audit gate, and pull the whole archive back to markdown">
+  <defs>
+    <linearGradient id="fbg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0d1117"/>
+      <stop offset="1" stop-color="#070a10"/>
+    </linearGradient>
+    <linearGradient id="fbar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#3b46ff"/>
+      <stop offset="1" stop-color="#121bfa"/>
+    </linearGradient>
+    <marker id="ablue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#4d58ff"/>
+    </marker>
+    <marker id="aamber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#f5a524"/>
+    </marker>
+    <marker id="agreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#3fb950"/>
+    </marker>
+    <style>
+      .m  { font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace; }
+      .s  { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="510" fill="url(#fbg)"/>
+
+  <!-- ================= update path, over the top, gated by audit ================= -->
+  <text class="m" x="600" y="36" fill="#f5a524" font-size="16" text-anchor="middle">substack update</text>
+  <path d="M185 190 L185 78 L548 78" fill="none" stroke="#f5a524" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M652 78 L1015 78 L1015 186" fill="none" stroke="#f5a524" stroke-width="2.5" stroke-linecap="round" marker-end="url(#aamber)"/>
+  <rect x="548" y="62" width="104" height="32" rx="16" fill="#161b22" stroke="#f5a524" stroke-width="2"/>
+  <text class="m" x="600" y="83" fill="#f5a524" font-size="14" text-anchor="middle">audit</text>
+  <text class="s" x="600" y="120" fill="#c9d1d9" font-size="14" text-anchor="middle">the audit gate blocks the write when the live page holds more than your file does</text>
+  <text class="s" x="988" y="158" fill="#8b949e" font-size="13" text-anchor="end">same URL, no email, no feed bump</text>
+
+  <!-- ================= three nodes ================= -->
+
+  <!-- A: the markdown file -->
+  <g>
+    <rect x="60" y="190" width="250" height="150" rx="12" fill="#161b22" stroke="#30363d" stroke-width="2"/>
+    <text class="m" x="82" y="224" fill="#f0f6fc" font-size="17">my-post.md</text>
+    <rect x="82" y="240" width="180" height="9" rx="4" fill="url(#fbar)"/>
+    <rect x="82" y="258" width="206" height="9" rx="4" fill="url(#fbar)" opacity="0.62"/>
+    <rect x="82" y="276" width="142" height="9" rx="4" fill="url(#fbar)" opacity="0.38"/>
+    <text class="s" x="82" y="316" fill="#8b949e" font-size="13">your editor. your git repo.</text>
+  </g>
+
+  <!-- B: the draft -->
+  <g>
+    <rect x="475" y="190" width="250" height="150" rx="12" fill="#161b22" stroke="#30363d" stroke-width="2"/>
+    <text class="m" x="497" y="224" fill="#f0f6fc" font-size="17">draft 209491778</text>
+    <g stroke="#3fb950" stroke-width="2.5" fill="none" stroke-linecap="round">
+      <polyline points="499,248 504,253 513,242"/>
+      <polyline points="499,270 504,275 513,264"/>
+      <polyline points="499,292 504,297 513,286"/>
+    </g>
+    <text class="s" x="525" y="253" fill="#c9d1d9" font-size="13">4 images uploaded</text>
+    <text class="s" x="525" y="275" fill="#c9d1d9" font-size="13">cover set</text>
+    <text class="s" x="525" y="297" fill="#c9d1d9" font-size="13">your slug, not theirs</text>
+    <text class="s" x="497" y="325" fill="#8b949e" font-size="13">id written back to frontmatter</text>
+  </g>
+
+  <!-- C: the live post -->
+  <g>
+    <rect x="890" y="190" width="250" height="150" rx="12" fill="#161b22" stroke="#30363d" stroke-width="2"/>
+    <circle cx="912" cy="218" r="6" fill="#3fb950"/>
+    <text class="m" x="928" y="224" fill="#f0f6fc" font-size="17">live post</text>
+    <rect x="912" y="244" width="206" height="9" rx="4" fill="#30363d"/>
+    <rect x="912" y="262" width="164" height="9" rx="4" fill="#30363d"/>
+    <text class="m" x="912" y="298" fill="#58a6ff" font-size="13">yoursite.com/p/my-post</text>
+    <text class="s" x="912" y="325" fill="#8b949e" font-size="13">on the web, in the inbox</text>
+  </g>
+
+  <!-- ================= forward arrows ================= -->
+  <line x1="320" y1="265" x2="463" y2="265" stroke="#4d58ff" stroke-width="2.5" stroke-linecap="round" marker-end="url(#ablue)"/>
+  <text class="m" x="392" y="252" fill="#8f97ff" font-size="14" text-anchor="middle">substack push</text>
+  <text class="s" x="392" y="288" fill="#6e7681" font-size="12" text-anchor="middle">markdown to</text>
+  <text class="s" x="392" y="304" fill="#6e7681" font-size="12" text-anchor="middle">ProseMirror</text>
+
+  <line x1="735" y1="265" x2="878" y2="265" stroke="#4d58ff" stroke-width="2.5" stroke-linecap="round" marker-end="url(#ablue)"/>
+  <text class="m" x="807" y="252" fill="#8f97ff" font-size="14" text-anchor="middle">publish</text>
+  <text class="m" x="807" y="288" fill="#8f97ff" font-size="14" text-anchor="middle">schedule</text>
+  <text class="s" x="807" y="308" fill="#6e7681" font-size="12" text-anchor="middle">server-side</text>
+
+  <!-- ================= pull path, under the bottom ================= -->
+  <path d="M1015 340 L1015 432 L191 432" fill="none" stroke="#3fb950" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M191 432 L185 432 L185 346" fill="none" stroke="#3fb950" stroke-width="2.5" stroke-linecap="round" marker-end="url(#agreen)"/>
+  <rect x="516" y="416" width="168" height="32" rx="16" fill="#0d1117" stroke="#3fb950" stroke-width="2"/>
+  <text class="m" x="600" y="437" fill="#3fb950" font-size="14" text-anchor="middle">substack pull</text>
+  <text class="s" x="600" y="478" fill="#c9d1d9" font-size="15" text-anchor="middle">every live post comes back as markdown, with every image beside it</text>
+</svg>

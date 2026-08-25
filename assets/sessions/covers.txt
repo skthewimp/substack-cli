@@ -1,0 +1,25 @@
+$ python build_specs.py
+  155 articles in inventory
+  155 headlines in headlines.tsv
+OK  0 unmatched slugs, 0 missing headlines, 0 unknown icons
+OK  wrote covers-all.json (155 specs)
+
+$ python render.py --out ../_COVERS
+  [001/155] 30-useful-scripts-ffmpeg-gallerydl-yt-dlp        Engineering  1.9s
+  [002/155] 9x9-harada-grid                                  Systems      1.7s
+  ...
+  [155/155] slaying-your-20s-pt1-owning-your-path            Career       1.8s
+OK  155 covers written to ../_COVERS
+
+$ python measure_fit.py
+OK  155/155 inside the safe zone x[124,1476] y[80,800]
+
+$ substack cover reflections-on-devrel-uni-cohort7 \
+    --image ../_COVERS/reflections-on-devrel-uni-cohort7-cover.png --yes
+cover 200988281: Reflections On DevRel Uni Cohort 7
+hero        node 0 (src matched cover_image)
+    uploaded reflections-on-devrel-uni-cohort7-cover.png
+    patched node 0, every other node is byte-identical
+OK  cover replaced on 200988281
+    post_date unchanged: 2026-06-07T05:30:22.000Z
+    no email sent: email_sent_at is still None

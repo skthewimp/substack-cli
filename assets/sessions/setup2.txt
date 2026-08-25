@@ -1,0 +1,11 @@
+$ substack init
+
+Publication URL: https://blog.atharvashah.com
+Paste your login cookie: ****************************
+
+OK  connected to 'Atharva Shah'
+
+$ substack doctor
+publication   blog.atharvashah.com
+posts         79 published
+OK  ready

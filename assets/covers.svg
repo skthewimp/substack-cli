@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="699" height="597" viewBox="0 0 699 597" role="img" aria-label="Terminal session: 155 covers, then 79 live posts">
+<rect width="699" height="597" rx="10" fill="#0d1117" stroke="#30363d"/>
+<path d="M0 10a10 10 0 0 1 10-10h679a10 10 0 0 1 10 10v22H0z" fill="#161b22"/>
+<line x1="0" y1="32" x2="699" y2="32" stroke="#30363d"/>
+<circle cx="18" cy="16" r="5.5" fill="#ff5f57"/>
+<circle cx="36" cy="16" r="5.5" fill="#febc2e"/>
+<circle cx="54" cy="16" r="5.5" fill="#28c840"/>
+<text x="349.5" y="21" fill="#6e7681" font-size="12" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace" text-anchor="middle">155 covers, then 79 live posts</text>
+<text x="22.0" y="52" fill="#3fb950" font-size="14" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace" xml:space="preserve">$ </text>
+<text x="38.8" y="52" fill="#f0f6fc" font-size="14" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace" xml:space="preserve">python build_specs.py</text>
+<text x="22.0" y="73" fill="#6e7681" font-size="14" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace" xml:space="preserve">  155 articles in inventory</text>
+<text x="22.0" y="94" fill="#6e7681" font-size="14" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace" xml:space="preserve">  155 headlines in headlines.tsv</text>
+<text x="22.0" y="115" fill="#3fb950" font-size="14" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace" xml:space="preserve">OK</text>
+<text x="38.8" y="115" fill="#c9d1d9" font-size="14" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace" xml:space="preserve">  </text>
+<text x="55.6" y="115" fill="#c9d1d9" font-size="14" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace" xml:space="preserve">0 unmatched slugs, 0 missing headlines, 0 unknown icons</text>
+<text x="22.0" y="136" fill="#3fb950" font-size="14" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace" xml:space="preserve">OK</text>
+<text x="38.8" y="136" fill="#c9d1d9" font-size="14" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace" xml:space="preserve">  </text>
+<text x="55.6" y="136" fill="#c9d1d9" font-size="14" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace" xml:space="preserve">wrote covers-all.json (155 specs)</text>
+<text x="22.0" y="178" fill="#3fb950" font-size="14" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace" xml:space="preserve">$ </text>
+<text x="38.8" y="178" fill="#f0f6fc" font-size="14" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace" xml:space="preserve">python render.py --out ../_COVERS</text>
+<text x="22.0" y="199" fill="#6e7681" font-size="14" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace" xml:space="preserve">  [001/155] 30-useful-scripts-ffmpeg-gallerydl-yt-dlp        Engineering  1.9s</text>
+<text x="22.0" y="220" fill="#6e7681" font-size="14" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace" xml:space="preserve">  [002/155] 9x9-harada-grid                                  Systems      1.7s</text>
+<text x="22.0" y="241" fill="#6e7681" font-size="14" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace" xml:space="preserve">  ...</text>
+<text x="22.0" y="262" fill="#6e7681" font-size="14" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace" xml:space="preserve">  [155/155] slaying-your-20s-pt1-owning-your-path            Career       1.8s</text>
+<text x="22.0" y="283" fill="#3fb950" font-size="14" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace" xml:space="preserve">OK</text>
+<text x="38.8" y="283" fill="#c9d1d9" font-size="14" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace" xml:space="preserve">  </text>
+<text x="55.6" y="283" fill="#c9d1d9" font-size="14" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace" xml:space="preserve">155 covers written to ../_COVERS</text>
+<text x="22.0" y="325" fill="#3fb950" font-size="14" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace" xml:space="preserve">$ </text>
+<text x="38.8" y="325" fill="#f0f6fc" font-size="14" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace" xml:space="preserve">python measure_fit.py</text>
+<text x="22.0" y="346" fill="#3fb950" font-size="14" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace" xml:space="preserve">OK</text>
+<text x="38.8" y="346" fill="#c9d1d9" font-size="14" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace" xml:space="preserve">  </text>
+<text x="55.6" y="346" fill="#c9d1d9" font-size="14" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace" xml:space="preserve">155/155 inside the safe zone x[124,1476] y[80,800]</text>
+<text x="22.0" y="388" fill="#3fb950" font-size="14" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace" xml:space="preserve">$ </text>
+<text x="38.8" y="388" fill="#f0f6fc" font-size="14" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace" xml:space="preserve">substack cover reflections-on-devrel-uni-cohort7 \</text>
+<text x="22.0" y="409" fill="#6e7681" font-size="14" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace" xml:space="preserve">    --image ../_COVERS/reflections-on-devrel-uni-cohort7-cover.png --yes</text>
+<text x="22.0" y="430" fill="#c9d1d9" font-size="14" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace" xml:space="preserve">cover 200988281: Reflections On DevRel Uni Cohort 7</text>
+<text x="22.0" y="451" fill="#6e7681" font-size="14" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace" xml:space="preserve">hero      </text>
+<text x="106.0" y="451" fill="#c9d1d9" font-size="14" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace" xml:space="preserve">  </text>
+<text x="122.8" y="451" fill="#c9d1d9" font-size="14" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace" xml:space="preserve">node 0 (src matched cover_image)</text>
+<text x="22.0" y="472" fill="#6e7681" font-size="14" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace" xml:space="preserve">    uploaded reflections-on-devrel-uni-cohort7-cover.png</text>
+<text x="22.0" y="493" fill="#6e7681" font-size="14" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace" xml:space="preserve">    patched node 0, every other node is byte-identical</text>
+<text x="22.0" y="514" fill="#3fb950" font-size="14" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace" xml:space="preserve">OK</text>
+<text x="38.8" y="514" fill="#c9d1d9" font-size="14" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace" xml:space="preserve">  </text>
+<text x="55.6" y="514" fill="#c9d1d9" font-size="14" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace" xml:space="preserve">cover replaced on 200988281</text>
+<text x="22.0" y="535" fill="#6e7681" font-size="14" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace" xml:space="preserve">    post_date unchanged: 2026-06-07T05:30:22.000Z</text>
+<text x="22.0" y="556" fill="#6e7681" font-size="14" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace" xml:space="preserve">    no email sent: email_sent_at is still None</text>
+</svg>

@@ -1,0 +1,7 @@
+$ substack push my-post.md
+
+  uploaded 4 images
+  uploaded the cover
+OK  draft created: How I Publish From The Terminal
+
+edit    blog.atharvashah.com/publish/post/209491778

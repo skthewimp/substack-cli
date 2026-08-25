@@ -1,0 +1,15 @@
+> put my new article on Substack and give me the link
+
+  Converting the markdown and uploading the images now.
+
+OK  draft created: How I Publish From The Terminal
+  blog.atharvashah.com/publish/post/209491778
+
+  It is a draft. Say the word and I will publish it.
+
+> fix the typo in paragraph three and update the live post
+
+  Checking the live page first so nothing gets lost.
+
+OK  the live page has 7 images and a video. All safe.
+OK  updated. No email went out, and the link did not change.
