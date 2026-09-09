@@ -12,13 +12,14 @@ a browser User-Agent passes, which is why this is stdlib and stays stdlib.
 """
 import base64
 import json
-import mimetypes
+import os
 import time
 import urllib.error
 import urllib.request
 from pathlib import Path
 
 from .errors import die
+from .security import asset_path, image_bytes, opener
 
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36"
 TIMEOUT = 60
@@ -70,14 +71,17 @@ class Client:
         if self.verbose:
             print(f"  -> {method} {url}")
 
+        if method not in ("GET", "HEAD"):
+            retries = 0  # A failed write may already have succeeded remotely.
         attempt = 0
         while True:
             try:
-                with urllib.request.urlopen(request, timeout=TIMEOUT) as response:
+                with opener().open(request, timeout=TIMEOUT) as response:
                     body = response.read().decode("utf-8", errors="replace")
                     return json.loads(body) if body.strip() else {}
             except urllib.error.HTTPError as exc:
-                body = exc.read().decode("utf-8", errors="replace")[:400]
+                # Never echo a remote error body; it may reflect credentials.
+                exc.close()
                 if exc.code in (401, 403):
                     die(f"{method} {url} returned {exc.code} (auth failed)\n\n"
                         + _auth_help(hub, self.config.publication_url))
@@ -85,7 +89,7 @@ class Client:
                     attempt += 1
                     time.sleep(1.5 * attempt)
                     continue
-                die(f"{method} {url} returned {exc.code}\n{body}")
+                die(f"{method} {url} returned {exc.code}; inspect remote state before retrying a write")
             except urllib.error.URLError as exc:
                 if attempt < retries:
                     attempt += 1
@@ -170,12 +174,10 @@ class Client:
 
     def upload_image(self, path):
         """Upload a local file to Substack's CDN, return the public url."""
-        path = Path(path)
-        if not path.is_file():
-            die(f"image not found: {path}")
-        mime = mimetypes.guess_type(str(path))[0] or "image/png"
+        path = asset_path(path, os.environ.get("SUBSTACK_ASSET_ROOT") or Path.cwd())
+        raw, mime = image_bytes(path)
         payload = {"image": f"data:{mime};base64,"
-                            + base64.b64encode(path.read_bytes()).decode("ascii")}
+                            + base64.b64encode(raw).decode("ascii")}
         response = self.post("/image", payload)
         url = response.get("url")
         if not url:

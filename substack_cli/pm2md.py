@@ -9,6 +9,9 @@ dropped, so the loss is visible in the file instead of silent.
 import re
 import urllib.request
 from pathlib import Path
+from urllib.parse import urlsplit
+
+from .security import MAX_IMAGE_BYTES, opener
 
 UA = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
 
@@ -60,9 +63,18 @@ class ImageStore:
         if url in self.seen:
             return self.seen[url]
         try:
+            parsed = urlsplit(url)
+            host = parsed.hostname or ""
+            if (parsed.scheme != "https" or parsed.username or parsed.password
+                    or parsed.port not in (None, 443)
+                    or not (host.endswith(".substackcdn.com") or host == "substackcdn.com"
+                            or host == "substack-post-media.s3.amazonaws.com")):
+                raise ValueError("image download host is not an approved Substack CDN")
             request = urllib.request.Request(url, headers=UA)
-            with urllib.request.urlopen(request, timeout=90) as response:
-                raw = response.read()
+            with opener().open(request, timeout=90) as response:
+                raw = response.read(MAX_IMAGE_BYTES + 1)
+                if len(raw) > MAX_IMAGE_BYTES:
+                    raise ValueError("image exceeds 20 MiB")
         except Exception as exc:                      # network, DNS, 404, timeout
             self.failures.append(f"{url[:70]}: {exc}")
             return None

@@ -235,6 +235,8 @@ class Converter:
         if src.startswith(("http://", "https://")):
             return captioned_image(src, alt)
         from urllib.parse import unquote
+
+        from .security import asset_path
         local = (self.base_dir / unquote(src)).resolve() if self.base_dir else None
         if not (self.with_images and self.upload):
             bucket = (report.offline_images if local and local.is_file()
@@ -244,6 +246,7 @@ class Converter:
         if not (local and local.is_file()):
             report.missing_images.append(src)
             return None
+        local = asset_path(local, self.base_dir)
         url = self.upload(local)
         report.uploaded.append(local.name)
         return captioned_image(url, alt)

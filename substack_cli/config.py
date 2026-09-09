@@ -1,21 +1,14 @@
-"""Where credentials come from, and in what order.
+"""Credentials come from a complete environment identity or one explicit/user file.
 
-Three sources, highest priority first:
-
-  1. Environment variables (SUBSTACK_PUBLICATION_URL, SUBSTACK_SESSION_TOKEN, ...)
-  2. ./.substack.json in the current directory or any parent
-  3. ~/.config/substack-cli/config.json (%APPDATA%\\substack-cli\\config.json on Windows)
-
-Only two values are ever required: the publication URL and the connect.sid
-cookie. The publication id and user id are read off the API the first time they
-are needed and cached back into whichever file the config came from, so nobody
-has to hunt for them in DevTools.
+Never discover configuration in a repository and never merge cookies across sources.
+Use --config for a trusted project-specific file.
 """
 import json
 import os
 from pathlib import Path
 
 from .errors import die
+from .security import https_origin, private_json
 
 PROJECT_FILE = ".substack.json"
 
@@ -99,9 +92,7 @@ class Config:
         url = str(self.values.get("publication_url") or "").strip().rstrip("/")
         if not url:
             die(SETUP_HINT)
-        if not url.startswith("http"):
-            url = "https://" + url
-        return url
+        return https_origin(url)
 
     @property
     def session_token(self):
@@ -150,27 +141,20 @@ class Config:
 
 
 def write_config(path, values):
-    path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(values, indent=2) + "\n", encoding="utf-8")
-    # The file holds session cookies, so keep it owner-readable where the OS
-    # has a concept of file modes at all.
-    try:
-        os.chmod(path, 0o600)
-    except OSError:
-        pass
+    private_json(path, values)
 
 
 def load(explicit_path=None):
-    """Merge every source into one Config."""
-    user_path = user_config_path()
-    project_path = Path(explicit_path) if explicit_path else find_project_config()
-
-    values = {}
-    values.update(_read_json(user_path))
-    values.update(_read_json(project_path))
-    values.update(_from_env())
-
-    # Write discovered ids back to the most specific file that already exists.
-    source = project_path if project_path else (user_path if user_path.is_file() else None)
-    return Config(values, source)
+    """Use one credential source; never discover configuration in a checkout."""
+    source = Path(explicit_path) if explicit_path else user_config_path()
+    env = _from_env()
+    identity = {"publication_url", "session_token"}
+    if identity.intersection(env):
+        if not identity.issubset(env):
+            die("Set SUBSTACK_PUBLICATION_URL and SUBSTACK_SESSION_TOKEN together")
+        return Config(env, None)
+    values = _read_json(source)
+    # Environment cookies must never attach themselves to a file-sourced identity.
+    if "hub_session_token" in env:
+        die("Hub cookie requires the publication URL and session token in the environment")
+    return Config(values, source if source.is_file() else None)

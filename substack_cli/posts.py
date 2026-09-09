@@ -10,6 +10,7 @@ from urllib.parse import unquote
 
 from . import frontmatter as fm
 from .errors import die
+from .security import asset_path
 
 # Node types the markdown converter can produce. Anything else in a live body
 # was made in Substack's editor and cannot survive a regeneration from markdown.
@@ -91,7 +92,7 @@ def resolve_cover(fields, md_path):
     if not path.is_file():
         die(f"cover not found: {path}\n"
             f"(from `cover: {reference}` in {Path(md_path).name})")
-    return path
+    return asset_path(path, Path(md_path).parent)
 
 
 # ---------------- slug enforcement ----------------

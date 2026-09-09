@@ -65,7 +65,8 @@ class FakeClient:
 
 
 @pytest.fixture()
-def article(tmp_path):
+def article(tmp_path, monkeypatch):
+    monkeypatch.setenv("SUBSTACK_BACKUP_DIR", str(tmp_path / "backups"))
     path = tmp_path / "post.md"
     path.write_text(ARTICLE, encoding="utf-8")
     return path
@@ -118,7 +119,9 @@ def test_update_preserves_editor_only_blocks_in_place(article):
 
 def test_no_preserve_drops_them_and_says_so(article):
     client = FakeClient()
-    run(client, article, "--yes", "--no-preserve")
+    from substack_cli.security import revision
+    run(client, article, "--yes", "--no-preserve",
+        "--accept-live-sha256", revision(client.record))
     body = json.loads(client.calls[0][2]["draft_body"])
     assert [node["type"] for node in body["content"]] == ["paragraph", "paragraph"]
 

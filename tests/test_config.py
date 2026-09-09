@@ -22,20 +22,21 @@ def test_environment_beats_the_project_file(tmp_path, monkeypatch):
     write(project, {"publication_url": "https://from-file.substack.com",
                     "session_token": "file-token"})
     monkeypatch.setenv("SUBSTACK_SESSION_TOKEN", "env-token")
+    monkeypatch.setenv("SUBSTACK_PUBLICATION_URL", "https://from-env.substack.com")
     monkeypatch.chdir(tmp_path)
 
     config = config_module.load()
-    assert config.publication_url == "https://from-file.substack.com"
+    assert config.publication_url == "https://from-env.substack.com"
     assert config.session_token == "env-token"
 
 
-def test_a_project_file_is_found_in_a_parent_directory(tmp_path, monkeypatch):
+def test_a_project_file_requires_an_explicit_path(tmp_path, monkeypatch):
     write(tmp_path / ".substack.json",
           {"publication_url": "https://x.substack.com", "session_token": "t"})
     nested = tmp_path / "posts" / "drafts"
     nested.mkdir(parents=True)
     monkeypatch.chdir(nested)
-    assert config_module.load().publication_url == "https://x.substack.com"
+    assert config_module.load(tmp_path / ".substack.json").publication_url == "https://x.substack.com"
 
 
 def test_a_bare_domain_gets_a_scheme():
@@ -78,5 +79,5 @@ def test_invalid_json_names_the_file(tmp_path, monkeypatch):
     bad.write_text("{not json", encoding="utf-8")
     monkeypatch.chdir(tmp_path)
     with pytest.raises(CLIError) as caught:
-        config_module.load()
+        config_module.load(bad)
     assert ".substack.json" in str(caught.value)

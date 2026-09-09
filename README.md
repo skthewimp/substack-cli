@@ -1,3 +1,14 @@
+# skthewimp/substack-cli
+
+Hardened fork for reviewed publishing automation. **Read [HARDENING.md](HARDENING.md)
+first.** It overrides the upstream instructions below, including configuration loading,
+email defaults, content audits, credential handling, and update approval.
+
+Install a reviewed commit from this fork; do not use the upstream installation commands
+or `agent install` below as your integration setup. This fork is not a security guarantee.
+
+---
+
 <div align="center">
 
 <img src="assets/logo.svg" width="112" alt="substack-cli logo">

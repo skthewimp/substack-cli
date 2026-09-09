@@ -3,6 +3,7 @@ import argparse
 import json
 import re
 import sys
+from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -13,6 +14,7 @@ from .api import Client
 from .errors import CLIError, die
 from .md2pm import Converter
 from .pm2md import ImageStore, doc_to_markdown
+from .security import asset_path, backup, https_origin, image_bytes, revision
 
 EPILOG = """\
 examples:
@@ -54,8 +56,8 @@ def build_converter(client, path, args):
 
 
 def report_warnings(report):
-    for line in report.warnings:
-        ui.warn(line)
+    if report.warnings:
+        die("Conversion refused: " + "; ".join(report.warnings))
     for name in report.uploaded:
         ui.step(f"uploaded image: {name}")
     for name in report.tables:
@@ -159,6 +161,7 @@ def cmd_init(client, args):
     if not token:
         die("A connect.sid cookie is required.")
 
+    url = https_origin(url)
     values = dict(existing)
     values.update({"publication_url": url, "session_token": token.strip()})
 
@@ -274,15 +277,20 @@ def cmd_templates(client, args):
 def cmd_render(client, args):
     """Convert markdown to ProseMirror offline. Nothing is sent anywhere."""
     path, fields, body = read_article(args.file)
-    converter = Converter(base_dir=path.parent, upload=None, with_images=False)
+    def offline_image(local):
+        local = asset_path(local, path.parent)
+        image_bytes(local)
+        return local.as_uri()
+
+    converter = Converter(base_dir=path.parent, upload=offline_image)
     doc, report = converter.convert(body)
     if args.out:
         Path(args.out).write_text(json.dumps(doc, indent=2), encoding="utf-8")
         ui.ok(f"wrote {args.out} ({len(doc['content'])} top-level nodes)")
     else:
         print(json.dumps(doc, indent=2))
-    for line in report.warnings:
-        print(ui.yellow("WARN  " + line), file=sys.stderr)
+    if report.warnings:
+        die("Conversion refused: " + "; ".join(report.warnings))
 
 
 def cmd_push(client, args):
@@ -380,6 +388,20 @@ def cmd_update(client, args):
         ui.warn("replacing the live body destroys "
                 + ", ".join(f"{count} x {kind}" for kind, count in sorted(destroyed.items())))
 
+    review = audit_report(client, args, path, fields, body)
+    accepted = getattr(args, "accept_live_sha256", None)
+    if accepted and accepted != review["live_sha256"]:
+        die("Live revision changed since review; audit again")
+    if review["warnings"]:
+        die("Conversion warnings must be resolved before updating")
+    if not review["clean"] and accepted != review["live_sha256"]:
+        die("Content replacement requires review: run audit --json, inspect the changes, "
+            "then pass --accept-live-sha256 with the reviewed live_sha256")
+    if revision(draft) != review["live_sha256"]:
+        die("Live revision changed during audit; retry review")
+    saved = backup(draft)
+    ui.step(f"saved pre-update backup: {saved}")
+
     ui.heading(f"update {path.name}")
     converter = build_converter(client, path, args)
     doc, report = converter.convert(body)
@@ -404,6 +426,8 @@ def cmd_update(client, args):
     if cover:
         payload["cover_image"] = cover
 
+    if revision(client.draft(post_id)) != review["live_sha256"]:
+        die("Live revision changed before write; audit again")
     client.put(f"/drafts/{post_id}", payload)
     client.post(f"/drafts/{post_id}/publish", {"send": False, "share_automatically": False})
     posts.enforce_slug(client, post_id, slug, "update", log=ui.step)
@@ -475,7 +499,26 @@ def audit_report(client, args, path, fields, body):
                               "ordered_list", "caption")
                  if live_counts.get(kind, 0) > local_counts.get(kind, 0)}
 
+    def texts(node):
+        found = []
+        if isinstance(node, dict):
+            if node.get("type") == "text":
+                found.append(node.get("text", ""))
+            for child in node.get("content", []):
+                found.extend(texts(child))
+        return found
+
+    removed_text = list((Counter(texts(live_body)) - Counter(texts(predicted))).elements())
+    removed_images = list((Counter(live_images) - Counter(posts.image_census(predicted))).elements())
+    if getattr(args, "no_preserve", False):
+        destroyed = census
     problems = []
+    if removed_text:
+        problems.append("text_changed_or_removed")
+    if removed_images:
+        problems.append("image_identity_changed_or_removed")
+    if structure:
+        problems.append("structure")
     if destroyed:
         problems.append("blocks")
     if local_images < len(live_images):
@@ -485,6 +528,9 @@ def audit_report(client, args, path, fields, body):
 
     return {
         "file": str(path),
+        "live_sha256": revision(draft),
+        "removed_text": removed_text,
+        "removed_images": removed_images,
         "post_id": post_id,
         "clean": not problems,
         "problems": problems,
@@ -546,7 +592,7 @@ def cmd_audit(client, args):
 
     print()
     if result["clean"]:
-        ui.ok("clean. `substack update` will not lose anything.")
+        ui.ok("No loss detected by conservative text, image and structure checks; review the preview.")
         return 0
     ui.fail(f"{len(result['problems'])} issue(s). Do not run `update` until they are "
             f"resolved.")
@@ -658,6 +704,8 @@ def cmd_pull(client, args):
     for index, post_id in enumerate(targets, 1):
         draft = client.draft(post_id)
         slug = draft.get("slug") or f"post-{post_id}"
+        if not posts.SLUG_OK.fullmatch(slug):
+            die("Unsafe remote slug; refusing filesystem writes")
         target = out_dir / f"{slug}.md"
         label = f"[{index}/{len(targets)}] {slug}"
         if target.exists() and not args.force:
@@ -719,8 +767,8 @@ def cmd_delete(client, args):
 
 def cmd_publish(client, args):
     if not args.yes:
-        die("`publish` goes live IMMEDIATELY and emails your subscribers unless you "
-            "pass --no-email. The API ignores future dates, so use `schedule` for "
+        die("`publish` goes live IMMEDIATELY and is web-only unless you "
+            "pass --send-email. The API ignores future dates, so use `schedule` for "
             "those. Rerun with --yes to confirm.")
     post_id = resolve_post(client, args.id)
     draft = client.draft(post_id)
@@ -906,6 +954,7 @@ def build_parser():
     update = add("update", "rewrite an already LIVE post (no email, no feed bump)")
     update.add_argument("file")
     update.add_argument("--yes", action="store_true", help="confirm rewriting the live page")
+    update.add_argument("--accept-live-sha256", help="explicitly approve replacement of this audited live revision")
     update.add_argument("--template", metavar="NAME")
     update.add_argument("--no-template", action="store_true")
     update.add_argument("--no-images", action="store_true")
@@ -966,6 +1015,9 @@ def build_parser():
     publish = add("publish", "publish a draft NOW (irreversible, may email subscribers)")
     publish.add_argument("id")
     publish.add_argument("--yes", action="store_true")
+    publish.add_argument("--send-email", dest="no_email", action="store_false",
+                         help="explicitly send subscriber email")
+    publish.set_defaults(no_email=True)
     publish.add_argument("--no-email", action="store_true",
                          help="put it on the web without emailing subscribers")
 
@@ -978,7 +1030,9 @@ def build_parser():
     schedule.add_argument("--at", required=True, metavar="WHEN",
                           help="'2027-01-09 09:00' (local), '2027-01-09' (9am local), "
                                "or '2027-01-09T09:00:00Z'")
+    schedule.add_argument("--send-email", dest="no_email", action="store_false")
     schedule.add_argument("--no-email", action="store_true")
+    schedule.set_defaults(no_email=True)
     schedule.add_argument("--audience", default="everyone",
                           choices=["everyone", "only_paid", "only_founding"])
 
