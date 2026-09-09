@@ -8,6 +8,11 @@ Use an exact reviewed commit, not an automatically updated branch.
 - Credentials come from one explicit `--config` file, the user config, or a complete
   environment identity. Checkout/parent `.substack.json` files are never discovered.
   Set both `SUBSTACK_PUBLICATION_URL` and `SUBSTACK_SESSION_TOKEN` together.
+  Set `session_cookie_name` (or `SUBSTACK_SESSION_COOKIE_NAME`) to the actual browser
+  cookie name: `connect.sid` (default) or `substack.sid`. For setup use
+  `substack init --cookie-name substack.sid` when that is the cookie your browser has.
+  The selected name is used on the publication host; the token is not copied into
+  other cookie names or sent to additional hosts.
 - Publication URLs must be HTTPS origins. All HTTP redirects are refused, ambient
   proxy settings are ignored, and remote error bodies are not echoed.
 - Credential files are replaced atomically with owner-only permissions.

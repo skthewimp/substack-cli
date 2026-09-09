@@ -155,15 +155,17 @@ def cmd_init(client, args):
 
     print()
     print(f"  Open {url} in your browser, press F12,")
-    print("  go to Application > Cookies > that domain, and copy connect.sid")
+    cookie_name = args.cookie_name or existing.get("session_cookie_name", "connect.sid")
+    print(f"  go to Application > Cookies > that domain, and copy {cookie_name}")
     print()
-    token = args.token or _ask("connect.sid: ", secret=True) or existing.get("session_token")
+    token = args.token or _ask(f"{cookie_name}: ", secret=True) or existing.get("session_token")
     if not token:
-        die("A connect.sid cookie is required.")
+        die("A session cookie is required.")
 
     url = https_origin(url)
     values = dict(existing)
-    values.update({"publication_url": url, "session_token": token.strip()})
+    values.update({"publication_url": url, "session_token": token.strip(),
+                   "session_cookie_name": cookie_name})
 
     if args.hub_token is not None:
         print()
@@ -920,7 +922,9 @@ def build_parser():
 
     setup = add("init", "save credentials and verify them")
     setup.add_argument("--url", help="publication URL, skips the prompt")
-    setup.add_argument("--token", help="connect.sid cookie, skips the prompt")
+    setup.add_argument("--token", help="session cookie value, skips the prompt")
+    setup.add_argument("--cookie-name", choices=["connect.sid", "substack.sid"],
+                       help="cookie name shown in the browser (default: connect.sid)")
     setup.add_argument("--hub-token", nargs="?", const="", default=None,
                        help="also store the substack.sid cookie, which enables scheduling")
     setup.add_argument("--local", action="store_true",

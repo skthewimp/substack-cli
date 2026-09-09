@@ -195,3 +195,25 @@ def test_equal_image_counts_do_not_hide_replacement(tmp_path):
     report = cli.audit_report(client, args, path, fields, body)
     assert not report['clean']
     assert report['removed_images'] == ['https://cdn/old.png']
+
+
+@pytest.mark.parametrize("name", ["connect.sid", "substack.sid"])
+def test_publication_request_uses_the_selected_cookie_name(monkeypatch, name):
+    transport = Mock()
+    response = Mock()
+    response.__enter__ = Mock(return_value=SimpleNamespace(read=lambda: b'{}'))
+    response.__exit__ = Mock(return_value=False)
+    transport.open.return_value = response
+    monkeypatch.setattr(api, "opener", lambda: transport)
+    client = api.Client(config.Config({
+        "publication_url": "https://trusted.substack.com", "session_token": "fake",
+        "session_cookie_name": name}, None))
+    client.get("/subscription")
+    request = transport.open.call_args.args[0]
+    assert request.get_header("Cookie") == name + "=fake"
+
+
+def test_unrecognized_cookie_name_cannot_inject_headers():
+    settings = config.Config({"session_cookie_name": "other; injected=value"}, None)
+    with pytest.raises(CLIError, match="cookie name"):
+        assert settings.session_cookie_name

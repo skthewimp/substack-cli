@@ -14,7 +14,7 @@ The hardened fork's HARDENING.md overrides upstream behavior.
 - `update --yes` enforces its own audit and creates a private backup. Intentional
   replacement needs `--accept-live-sha256 <reviewed-live-sha256>`. Never automatically
   forward that hash without reviewing the change. If the revision changed, review again.
-- Push does not change a live post; it writes staging only. Use update for live changes.
+- Remember: substack push does not change a live post; it writes staging only. Use update for live changes.
 - Never retry a failed write blindly. Inspect remote state; it may have succeeded.
 - Never obtain or print cookies in chat. The user performs setup in a terminal.
 - Use only a pinned reviewed runtime inside the publishing sandbox. Do not install

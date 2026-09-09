@@ -36,10 +36,10 @@ def _auth_help(hub, publication_url):
             "  4. Save it: substack init --hub-token\n"
             "     (or set SUBSTACK_HUB_SESSION_TOKEN)")
     return (
-        "The connect.sid cookie is missing or expired (they last 2 to 4 weeks).\n"
+        "The configured session cookie is missing or expired.\n"
         f"  1. Open {publication_url} in a logged-in browser\n"
         "  2. F12 > Application > Cookies > that domain\n"
-        "  3. Copy the value of connect.sid\n"
+        "  3. Copy the value of your configured cookie (connect.sid or substack.sid)\n"
         "  4. Save it: substack init\n"
         "     (or set SUBSTACK_SESSION_TOKEN)")
 
@@ -61,7 +61,7 @@ class Client:
             cookie = f"substack.sid={self.config.hub_session_token}"
         else:
             url = self.config.base + path
-            cookie = f"connect.sid={self.config.session_token}"
+            cookie = f"{self.config.session_cookie_name}={self.config.session_token}"
 
         data = json.dumps(payload).encode("utf-8") if payload is not None else None
         headers = {"Cookie": cookie, "User-Agent": UA,

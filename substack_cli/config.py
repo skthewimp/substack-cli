@@ -15,6 +15,7 @@ PROJECT_FILE = ".substack.json"
 ENV_KEYS = {
     "publication_url": "SUBSTACK_PUBLICATION_URL",
     "session_token": "SUBSTACK_SESSION_TOKEN",
+    "session_cookie_name": "SUBSTACK_SESSION_COOKIE_NAME",
     "hub_session_token": "SUBSTACK_HUB_SESSION_TOKEN",
     "user_id": "SUBSTACK_USER_ID",
     "publication_id": "SUBSTACK_PUBLICATION_ID",
@@ -100,6 +101,13 @@ class Config:
         if not token:
             die(SETUP_HINT)
         return token
+
+    @property
+    def session_cookie_name(self):
+        name = self.values.get("session_cookie_name", "connect.sid")
+        if name not in ("connect.sid", "substack.sid"):
+            die("Session cookie name must be connect.sid or substack.sid")
+        return name
 
     @property
     def base(self):
