@@ -1,4 +1,12 @@
-# skthewimp/substack-cli
+# substack-cli — a fork of HighnessAtharva/substack-cli
+
+**This repository is a fork of [HighnessAtharva/substack-cli](https://github.com/HighnessAtharva/substack-cli),
+created by [Atharva Shah (@HighnessAtharva)](https://github.com/HighnessAtharva).**
+Credit for the original CLI, its publishing workflow, and documentation belongs to
+Atharva Shah. The original [MIT license and copyright notice](LICENSE) are preserved.
+
+This fork adds security hardening and safeguards for Bangalore Weather's publishing
+automation. Fork-specific changes are documented in [HARDENING.md](HARDENING.md).
 
 Hardened fork for reviewed publishing automation. **Read [HARDENING.md](HARDENING.md)
 first.** It overrides the upstream instructions below, including configuration loading,
@@ -8,6 +16,11 @@ Install a reviewed commit from this fork; do not use the upstream installation c
 or `agent install` below as your integration setup. This fork is not a security guarantee.
 
 ---
+
+## Original project README
+
+The documentation below is retained from Atharva Shah’s original project. First-person
+references describe the original author’s work; fork-specific behavior is documented above.
 
 <div align="center">
 
